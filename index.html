@@ -1,0 +1,77 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM_KT4</title>
+    <style>
+
+        .slider-container {
+            width: 300px;
+            position:absolute;
+        }
+        .slider {
+            width: 100%;
+            height: 20px;
+            background-color: #090363;
+            position: relative;
+        }
+
+        .slider .handle {
+            width: 20px;
+            height: 20px;
+            background-color: #1da59e;
+            position: absolute;
+            top: 0;
+            transform: translateX(-50%);}
+        </style>
+    </head>
+    <body>
+
+    <div class="containerValue">0</div>
+        
+    <div class="slider-container">
+        <div class="slider">
+            <div class="handle" style="left: 0px;"></div>
+        </div>
+        <div class="value"></div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var sliderContainer = document.querySelector(".slider-container");
+            var slider = sliderContainer.querySelector(".slider");
+            var handle = slider.querySelector(".handle");
+            var valueDisplay = document.getElementsByClassName('containerValue')[0]
+            function updateValueDisplay() {
+                var value = Math.round((handle.offsetLeft / (slider.offsetWidth - handle.offsetWidth)) * 100);
+                if (value >100){
+                    value = 100
+                }
+                valueDisplay.textContent = value;
+            }
+            function handleMouseMove(event) {
+                var newPosition = event.clientX - slider.offsetLeft - handle.offsetWidth / 2;
+                var minPosition = 0;
+                var maxPosition = slider.offsetWidth - handle.offsetWidth/2;
+    
+                if (newPosition < minPosition) {
+                    newPosition = minPosition;
+                } else if (newPosition > maxPosition) {
+                    newPosition = maxPosition;
+                }
+    
+                handle.style.left = newPosition + "px";
+    
+                updateValueDisplay();
+            }
+            function handleMouseDown(event) {
+                document.addEventListener("mousemove", handleMouseMove);
+                document.addEventListener("mouseup", handleMouseUp);
+            }
+            function handleMouseUp() {
+                document.removeEventListener("mousemove", handleMouseMove);
+                document.removeEventListener("mouseup", handleMouseUp);
+            }
+            handle.addEventListener("mousedown", handleMouseDown);
+        });
+    </script>
+    </body>
+    </html>
